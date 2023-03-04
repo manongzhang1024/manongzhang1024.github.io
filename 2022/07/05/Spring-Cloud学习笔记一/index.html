@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Spring Cloud学习笔记一 | 旅人小站</title><meta name="keywords" content="Spring"><meta name="author" content="Ryan Tian"><meta name="copyright" content="Ryan Tian"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Spring Cloud学习笔记一1.环境搭建前置需要：Java版本1.8以上、Maven版本3.2以上 TODO  基于SpringBoot的父maven项目 创建2个服务  创建父工程，以及两个子工程 pom中分别加入依赖  1234&lt;dependency&gt;          &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud学习笔记一">
+<meta property="og:url" content="https://ryantian96.github.io/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/index.html">
+<meta property="og:site_name" content="旅人小站">
+<meta property="og:description" content="Spring Cloud学习笔记一1.环境搭建前置需要：Java版本1.8以上、Maven版本3.2以上 TODO  基于SpringBoot的父maven项目 创建2个服务  创建父工程，以及两个子工程 pom中分别加入依赖  1234&lt;dependency&gt;          &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&amp;g">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/08/06/vuJzOf.png">
+<meta property="article:published_time" content="2022-07-05T15:55:04.000Z">
+<meta property="article:modified_time" content="2022-08-08T03:54:04.740Z">
+<meta property="article:author" content="Ryan Tian">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/08/06/vuJzOf.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ryantian96.github.io/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring Cloud学习笔记一',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-08-08 11:54:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s1.ax1x.com/2022/05/08/O8Agt1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s1.ax1x.com/2022/08/06/vuJzOf.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">旅人小站</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring Cloud学习笔记一</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-05T15:55:04.000Z" title="发表于 2022-07-05 23:55:04">2022-07-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-08T03:54:04.740Z" title="更新于 2022-08-08 11:54:04">2022-08-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring Cloud学习笔记一"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Spring-Cloud学习笔记一"><a href="#Spring-Cloud学习笔记一" class="headerlink" title="Spring Cloud学习笔记一"></a>Spring Cloud学习笔记一</h1><h2 id="1-环境搭建"><a href="#1-环境搭建" class="headerlink" title="1.环境搭建"></a>1.环境搭建</h2><p>前置需要：Java版本1.8以上、Maven版本3.2以上</p>
+<p><strong>TODO</strong></p>
+<ol>
+<li>基于SpringBoot的父maven项目</li>
+<li>创建2个服务</li>
+</ol>
+<p>创建父工程，以及两个子工程</p>
+<p>pom中分别加入依赖</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>创建测试用controller</p>
+<p>下单工程order</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/2 22:34</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/order&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;add&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">add</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下单成功！&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Order Success!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>库存工程stock</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/2 22:47</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/stock&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StockController</span> &#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/reduct&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reduct</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;扣减库存&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Reduce Success!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>分别创建springboot启动类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(OrderApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StockApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(StockApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在启动类中配置RestTemplate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(OrderApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">        <span class="type">RestTemplate</span> <span class="variable">restTemplate</span> <span class="operator">=</span> builder.build();</span><br><span class="line">        <span class="keyword">return</span> restTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用RestTemlate进行服务调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/2 22:34</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/order&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/add&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">add</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下单成功！&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> restTemplate.getForObject(<span class="string">&quot;http://localhost:8012/stock/reduct&quot;</span>, String.class);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Order Success!&quot;</span>+msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用order测试接口 <a target="_blank" rel="noopener" href="http://localhost:8010/order/add">http://localhost:8010/order/add</a></p>
+<p>![image-20220702235250330](.&#x2F;spring cloud学习笔记一&#x2F;image-20220702235250330.png)</p>
+<p>存在问题，restTemplate调用时地址耦合性低</p>
+<h2 id="2-spring-cloud-alibaba环境搭建"><a href="#2-spring-cloud-alibaba环境搭建" class="headerlink" title="2.spring cloud alibaba环境搭建"></a>2.spring cloud alibaba环境搭建</h2><p>版本</p>
+<p>spring cloud alibaba 2.2.5</p>
+<p>在pom文件的dependencyManagement标签下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--spring cloud alibaba版本管理--&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-alibaba-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- spring cloud 版本管理 --&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">version</span>&gt;</span>Hoxton.SR8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-架构演变过程"><a href="#3-架构演变过程" class="headerlink" title="3.架构演变过程"></a>3.架构演变过程</h2><p>从上至下：</p>
+<p>单体应用架构</p>
+<p>垂直应用架构</p>
+<p>分布式架构</p>
+<p>SOA架构</p>
+<p>微服务架构</p>
+<ol>
+<li><p><strong>单体应用架构</strong></p>
+<p>互联网早期，网站应用流量较小，只需一个应用，这样可以减少开发、部署和维护的成本</p>
+<p>优点：架构简单，项目开发和维护成本低</p>
+<p>缺点：全部功能集成在一个工程中，对于大型项目来讲不易开发和维护</p>
+</li>
+<li><p><strong>垂直应用架构</strong></p>
+<p>将原来一个项目应用进行拆分，将其拆分为互不相干的几个应用，以此来提升系统的整体性能。</p>
+<p>系统进行了拆分，可根据不同系统的访问情况，有针对性的进行优化。</p>
+<p>优点：</p>
+<ul>
+<li><p>能够实现应用的水平扩展。</p>
+</li>
+<li><p>各系统能够分担整体访问的流量，解决了并发问题。</p>
+</li>
+<li><p>一个系统发生了故障，不应用其他系统的运行情况，提高了整体的容错率。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>缺点：</p>
+<ul>
+<li>拆分后的各系统之间相对比较独立，无法进行互相调用。<ul>
+<li>各系统难免存在重叠的业务，会存在重复开发的业务，后期维护比较困难。</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><p><strong>分布式架构</strong></p>
+<p>在分布式架构中，我们会将系统整体拆分为服务层和表现层。</p>
+<p>服务层封装了具体的业务逻辑供表现层调用，表现层则负责处理与页面的交互操作。</p>
+<p>优点：</p>
+<ul>
+<li><p>将重复的业务代码抽象出来，形成公共的访问服务，提高了代码的复用性。</p>
+</li>
+<li><p>可以有针对性的对系统和服务进行性能优化，以提升整体的访问性能。</p>
+</li>
+</ul>
+<p>缺点：系统之间的耦合度变高，调用关系变得复杂，难以维护。</p>
+</li>
+<li><p><strong>SOA架构（面向服务）</strong></p>
+<p>优点：使用注册中心解决了各个服务之间的服务依赖和调用关系的自动注册与发现。</p>
+<p>缺点：</p>
+<ul>
+<li><p>各服务之间存在依赖关系，如果某个服务出现故障可能会造成服务的雪崩（关于穿透、击穿和雪崩的问题）</p>
+</li>
+<li><p>服务之间的依赖与调用关系复杂，测试部署的困难比较大。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>微服务架构</strong></p>
+<p>微服务架构在微服务架构下，我们将一个大的项目拆分为一个个小的可以独立部署的微服务，每个微服务都有自己的数据库。</p>
+<p>优点：</p>
+<ul>
+<li><p>服务彻底拆分，各服务独立打包、独立部署和独立升级。</p>
+</li>
+<li><p>每个微服务负责的业务比较清晰，利于后期扩展和维护。</p>
+</li>
+<li><p>微服务之间可以采用REST和RPC协议进行通信。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>开发的成本比较高。涉及到各服务的容错性问题。</li>
+<li>涉及到数据的一致性问题。涉及到分布式事务问题</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-Nacos注册中心"><a href="#4-Nacos注册中心" class="headerlink" title="4.Nacos注册中心"></a>4.Nacos注册中心</h2><p>官方介绍：一个更易于构建云原生应用的动态<strong>服务发现</strong>、<strong>服务配置</strong>和<strong>服务管理</strong>平台</p>
+<p>是一个集 注册中心+配置中心+服务管理 平台</p>
+<p>Nacos的关键特性包括：</p>
+<ul>
+<li>服务的发现和服务健康监测</li>
+<li>动态配置服务</li>
+<li>动态DNS服务</li>
+<li>服务及其他元数据管理</li>
+</ul>
+<h3 id="4-1-演变过程"><a href="#4-1-演变过程" class="headerlink" title="4.1 演变过程"></a>4.1 演变过程</h3><p>演变过程：初期设计的注册中心中有一个服务注册表，存储服务的名称、ip、port、status等信息，还包括服务对外提供的接口</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220704165048505.png" alt="image-20220704165048505"></p>
+<p>注册中心宕机？</p>
+<p>加入心跳监测功能，5s获取不到服务将会设置为下线，30s获取不到服务将剔除服务</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220704170232531.png" alt="image-20220704170232531"></p>
+<h3 id="4-2-Nacos-discovery"><a href="#4-2-Nacos-discovery" class="headerlink" title="4.2 Nacos discovery"></a>4.2 Nacos discovery</h3><p>服务发现是微服务架构体系中最关键的组件之一。如果尝试着用手动的方式来给每一个客户端来配置所有服务提供者的服务列表是一件非常困难的事，而且也不利于 服务的动态扩缩容。Nacos Discovery Starter 可以帮助您将服务自动注册到 Nacos 服务端并且能够动态感知和刷新某个服务实例的服务列表。除此之外，Nacos Discovery Starter 也将服务实例自身的一些元数据信息-例如 host，port,健康检查URL，主页等-注册到 Nacos 。</p>
+<h3 id="4-3-核心功能"><a href="#4-3-核心功能" class="headerlink" title="4.3 核心功能"></a>4.3 核心功能</h3><p>Nacos Discovery Starter 服务注册发现组件，服务发现是微服务架构体系中最关键的组件。服务注册发现组件可以将服务自动注册到Nacos服务端并且能够动态感知和刷新某个服务实例的服务列表。除此之外，Nacos也会定期的将服务实例自己服务的ip、端口信息、url等注册到Nacos</p>
+<p><strong>服务发现</strong>：服务消费者（Nacos Client）在调用服务提供者的服务时，会发送一个REST请求给Nacos Server，获取上面注册的服务清单，并且缓存在Nacos Client本地，同时会在Nacos Client本地开启一个定时任务定时拉取服务端最新的注册表信息更新到本地缓存。</p>
+<p><strong>服务注册</strong>：Nacos client 会通过发送Rest请求的方式向Nacos Server注册自己的服务，提供自身的元数据，比如ip地址、端口等信息，Nacos Server接收到注册请求后，就会把这些元数据存储在一个双层的内存Map中。</p>
+<p><strong>服务心跳</strong>：在服务注册后，Nacos Client会维护一个定时心跳来持续通知Nacos Server，说明服务一直处于可用状态，防止被剔除。默认5s发送一次心跳。</p>
+<p>服务同步：Nacos Server集群之间会互相同步服务实例，用来保证服务信息的一致性。</p>
+<p><strong>服务器健康检查</strong>：Nacos Server会开启一个定时任务用来检查注册服务实例的健康情况，超过15s没有收到客户端心跳的实例会将它的healthy属性设置为false（客户端服务发现时不会发现），如果某个实例超过30秒没有收到心跳，直接提出该实例（被剔除的实例如果恢复发送心跳则会重新注册）</p>
+<h3 id="4-4-和其他主注册中心的区别"><a href="#4-4-和其他主注册中心的区别" class="headerlink" title="4.4 和其他主注册中心的区别"></a>4.4 和其他主注册中心的区别</h3><p>CAP  C 一致性  A 可用性  P 分区容错性</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220704182941356.png" alt="image-20220704182941356"></p>
+<h3 id="4-5-Nacos使用"><a href="#4-5-Nacos使用" class="headerlink" title="4.5 Nacos使用"></a>4.5 Nacos使用</h3><h4 id="4-5-1-本地启动nacos服务（windows）"><a href="#4-5-1-本地启动nacos服务（windows）" class="headerlink" title="4.5.1 本地启动nacos服务（windows）"></a>4.5.1 本地启动nacos服务（windows）</h4><p>下载地址 <a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/releases">https://github.com/alibaba/nacos/releases</a></p>
+<p>按照版本对照使用1.4.1版本</p>
+<p>修改bin目录下startup.cmd(windows)中的cluster为standalone</p>
+<img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220704185543462.png" alt="image-20220704185543462" style="zoom: 80%;">
+
+<p>启动成功如下</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220704185748714.png" alt="image-20220704185748714"></p>
+<p>访问控制台：<a target="_blank" rel="noopener" href="http://192.168.0.106:8848/nacos/index.html">http://192.168.0.106:8848/nacos/index.html</a></p>
+<p>默认账号密码都是nacos</p>
+<h4 id="4-5-2-spring-boot-配置nacos-discovery服务"><a href="#4-5-2-spring-boot-配置nacos-discovery服务" class="headerlink" title="4.5.2 spring boot 配置nacos discovery服务"></a>4.5.2 spring boot 配置nacos discovery服务</h4><p>参考页面<a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/quick-start-spring-cloud.html">https://nacos.io/zh-cn/docs/quick-start-spring-cloud.html</a></p>
+<p>1.添加依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2 在 <code>application.properties</code> 中配置 Nacos server 的地址：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">stock-service</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">username:</span> <span class="string">nacos</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">nacos</span></span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">public</span></span><br></pre></td></tr></table></figure>
+
+<p>ephemeral: false #永久实例，宕机后也不会触发30s剔除</p>
+<p>3.通过 Spring Cloud 原生注解 <code>@EnableDiscoveryClient</code> 开启服务注册发现功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="comment">//@EnableDiscoveryClient 服务可被发现注解 现在版本可加可不加</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderNacosApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(OrderNacosApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">        <span class="type">RestTemplate</span> <span class="variable">restTemplate</span> <span class="operator">=</span> builder.build();</span><br><span class="line">        <span class="keyword">return</span> restTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动，日志显示nacos已注册</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722181500635.png" alt="image-20220722181500635"></p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722181545409.png" alt="image-20220722181545409"></p>
+<h4 id="4-5-3-修改原有接口并测试调用"><a href="#4-5-3-修改原有接口并测试调用" class="headerlink" title="4.5.3 修改原有接口并测试调用"></a>4.5.3 修改原有接口并测试调用</h4><p>1.在RestTemplate上添加@LoadBalanced注解，使其负载均衡</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">   <span class="meta">@LoadBalanced</span></span><br><span class="line">   <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">       <span class="type">RestTemplate</span> <span class="variable">restTemplate</span> <span class="operator">=</span> builder.build();</span><br><span class="line">       <span class="keyword">return</span> restTemplate;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.将原来调用的接口url地址换为nacos代理后的地址</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/add&quot;)</span></span><br><span class="line">   <span class="keyword">public</span> String <span class="title function_">add</span><span class="params">()</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;下单成功！&quot;</span>);</span><br><span class="line">       <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> restTemplate.getForObject(<span class="string">&quot;http://stock-service/stock/reduct&quot;</span>, String.class);</span><br><span class="line">       <span class="keyword">return</span> <span class="string">&quot;Order Success!&quot;</span>+msg;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.调用测试</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722204808125.png" alt="image-20220722204808125"></p>
+<h3 id="4-6-nacos的负载均衡"><a href="#4-6-nacos的负载均衡" class="headerlink" title="4.6 nacos的负载均衡"></a>4.6 nacos的负载均衡</h3><p>使用idea复制库存微服务以达到测试负载均衡的目的</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722205138011.png" alt="image-20220722205138011"></p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722210910230.png" alt="image-20220722210910230"></p>
+<p>这里遇到一个小坑，我是用的22.1版本的idea，这里要点击修改选项把环境变量输入框设置展示，再手动输入端口配置（下方提示有格式）</p>
+<p>修改代码，把启动端口值注入测试接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/stock&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StockController</span> &#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;server.port&#125;&quot;)</span></span><br><span class="line">    String port;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/reduct&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reduct</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;扣减库存:&quot;</span>+port);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Reduce Success!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后调用刚才的接口，结果可以在控制台看到，可以看到22端口执行一次，23端口一次，这里不再演示调用</p>
+<p>Nacos默认采用的Ribbon的负载均衡，下图可以发现，这里把netflix的ribbon也引入进来了</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220722212013467.png" alt="image-20220722212013467"></p>
+<h2 id="5-Ribbon负载均衡"><a href="#5-Ribbon负载均衡" class="headerlink" title="5.Ribbon负载均衡"></a>5.Ribbon负载均衡</h2><h3 id="5-1什么是Ribbon？"><a href="#5-1什么是Ribbon？" class="headerlink" title="5.1什么是Ribbon？"></a><strong>5.1什么是Ribbon？</strong></h3><p>目前主流的负载方案分为以下两种：</p>
+<ul>
+<li><p>集中式负载均衡，在消费者和服务提供方中间使用独立的代理方式进行负载，有硬件的（F5），也有软件的（Nginx）</p>
+</li>
+<li><p>客户端根据自己的请求情况做负载均衡，Ribbon就属于客户端自己做负载均衡。</p>
+</li>
+</ul>
+<p>Spring Cloud Ribbon是基于Netflix Ribbon实现的一套客户端负载均衡工具，Ribbon客户端组件提供一些列的完善的配置，如超时，重试等。通过Load Balancer获取到服务提供的所有机器实例，Ribbon会基于某种规则（轮询，随机）去调用这些服务。Ribbon也可以实现我们自己的负载均衡算法。</p>
+<h3 id="5-2-常见负载均衡算法"><a href="#5-2-常见负载均衡算法" class="headerlink" title="5.2 常见负载均衡算法"></a>5.2 常见负载均衡算法</h3><ul>
+<li>随机，通过随机选择服务器进行执行，一般这种方式使用较少</li>
+<li>轮询，负载均衡默认实现方式，请求来之后排队处理</li>
+<li>加权轮询，通过对服务器性能的分型，给性能高的服务器分配更高的权重，均衡各个服务器的压力</li>
+<li>地址Hash，通过客户端请求的地址的HASH值取模映射进行服务器调度。ip has</li>
+<li>最小链接数，即使请求均衡了，压力不一定会均衡，最小链接数就是根绝服务器的情况，比如请求积压数等参数，将请求分配到当前压力最小的服务器上。最小活跃数</li>
+</ul>
+<h3 id="5-3负载均衡的使用"><a href="#5-3负载均衡的使用" class="headerlink" title="5.3负载均衡的使用"></a>5.3负载均衡的使用</h3><p>在前面4.5.3也有介绍，在Bean上添加@LoadBalanced注解即可。</p>
+<h3 id="5-4Ribbon负载均衡策略"><a href="#5-4Ribbon负载均衡策略" class="headerlink" title="5.4Ribbon负载均衡策略"></a>5.4Ribbon负载均衡策略</h3><p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220723002446110.png" alt="image-20220723002446110"></p>
+<p><strong>IRule</strong></p>
+<p>这是所有负载均衡策略的父接口，里边的核心方法就是choose方法，用来选择一个服务实例。</p>
+<p><strong>AbstractLoadBalancerRule</strong></p>
+<p>AbstractLoadBalancerRule是一个抽象类，里边主要定义了一个ILoadBalancer，这里定义它的目的主要是辅助负责均衡策略选取合适的服务端实 例。</p>
+<p><strong>RandomRule</strong></p>
+<p>看名字就知道，这种负载均衡策略就是随机选择一个服务实例，看源码我们知道，在RandomRule的无参构造方法中初始化了一个Random对象， 然后在它重写的choose方法又调用了choose(ILoadBalancer lb, Object key)这个重载的choose方法，在这个重载的choose方法中，每次利用 random对象生成一个不大于服务实例总数的随机数，并将该数作为下标所以获取一个服务实例。</p>
+<p><strong>RoundRobinRule</strong></p>
+<p>RoundRobinRule这种负载均衡策略叫做线性轮询负载均衡策略。这个类的choose(ILoadBalancer lb, Object key)函数整体逻辑是这样的：开启 一个计数器count，在while循环中遍历服务清单，获取清单之前先通过incrementAndGetModulo方法获取一个下标，这个下标是一个不断自增长 的数先加1然后和服务清单总数取模之后获取到的（所以这个下标从来不会越界），拿着下标再去服务清单列表中取服务，每次循环计数器都会加 1，如果连续10次都没有取到服务，则会报一个警告No available alive servers after 10 tries from load balancer: XXXX。</p>
+<p><strong>RetryRule</strong>（在轮询的基础上进行重试）</p>
+<p>看名字就知道这种负载均衡策略带有重试功能。首先RetryRule中又定义了一个subRule，它的实现类是RoundRobinRule，然后在RetryRule的 choose(ILoadBalancer lb, Object key)方法中，每次还是采用RoundRobinRule中的choose规则来选择一个服务实例，如果选到的实例正常就返 回，如果选择的服务实例为null或者已经失效，则在失效时间deadline之前不断的进行重试（重试时获取服务的策略还是RoundRobinRule中定义的 策略），如果超过了deadline还是没取到则会返回一个null。</p>
+<p><strong>WeightedResponseTimeRule</strong>（权重 —nacos的NacosRule ，Nacos还扩展了一个自己的基于配置的权重扩展）</p>
+<p>WeightedResponseTimeRule是RoundRobinRule的一个子类，在WeightedResponseTimeRule中对RoundRobinRule的功能进行了扩展， WeightedResponseTimeRule中会根据每一个实例的运行情况来给计算出该实例的一个权重，然后在挑选实例的时候则根据权重进行挑选，这样能 够实现更优的实例调用。WeightedResponseTimeRule中有一个名叫DynamicServerWeightTask的定时任务，默认情况下每隔30秒会计算一次 各个服务实例的权重，权重的计算规则也很简单，如果一个服务的平均响应时间越短则权重越大，那么该服务实例被选中执行任务的概率也就越大。</p>
+<p><strong>ClientConfigEnabledRoundRobinRule</strong></p>
+<p>ClientConfigEnabledRoundRobinRule选择策略的实现很简单，内部定义了RoundRobinRule，choose方法还是采用了RoundRobinRule的 choose方法，所以它的选择策略和RoundRobinRule的选择策略一致，不赘述。</p>
+<p><strong>BestAvailableRule</strong></p>
+<p>BestAvailableRule继承自ClientConfigEnabledRoundRobinRule，它在ClientConfigEnabledRoundRobinRule的基础上主要增加了根据 loadBalancerStats中保存的服务实例的状态信息来过滤掉失效的服务实例的功能，然后顺便找出并发请求最小的服务实例来使用。然而 loadBalancerStats有可能为null，如果loadBalancerStats为null，则BestAvailableRule将采用它的父类即 ClientConfigEnabledRoundRobinRule的服务选取策略（线性轮询）。</p>
+<p><strong>ZoneAvoidanceRule</strong> （默认规则，复合判断server所在区域的性能和server的可用性选择服务器。） ZoneAvoidanceRule是PredicateBasedRule的一个实现类，只不过这里多一个过滤条件，ZoneAvoidanceRule中的过滤条件是以 ZoneAvoidancePredicate为主过滤条件和以 AvailabilityPredicate为次过滤条件组成的一个叫做CompositePredicate的组合过滤条件，过滤成功之后，继续采用线性轮询 (RoundRobinRule)的方式从过滤结果中选择一个出来。</p>
+<p><strong>AvailabilityFilteringRule</strong>（先过滤掉故障实例，再选择并发较小的实例）</p>
+<p>过滤掉一直连接失败的被标记为circuit tripped的后端Server，并过滤掉那些高并发的后端Server或者使用一个AvailabilityPredicate来 包含过滤server的逻辑，其实就是检查status里记录的各个Server的运行状态。</p>
+<h3 id="5-5修改默认负载均衡策略"><a href="#5-5修改默认负载均衡策略" class="headerlink" title="5.5修改默认负载均衡策略"></a>5.5修改默认负载均衡策略</h3><h4 id="5-5-1-手动编写类的方式修改"><a href="#5-5-1-手动编写类的方式修改" class="headerlink" title="5.5.1 手动编写类的方式修改"></a>5.5.1 手动编写类的方式修改</h4><p>复制一个order项目，在parent的pom中加上它的module,修改yml中的启动端口</p>
+<p>创建config类文件，这里要把它放在@ComponentScan扫描到的地方，@ComponentScan默认扫描本包下内容，如果被扫到了，就会被所有的RibbonClients共享。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.ryan.ribbonConfig;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/23 0:44</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RandomRuleConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> IRule <span class="title function_">iRule</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RandomRule</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在spring boot 启动类配置ribbon服务的名称</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/2 22:53</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="comment">// 配置ribbon消费的服务名称，配置文件</span></span><br><span class="line"><span class="meta">@RibbonClients(value = &#123;@RibbonClient(name = &quot;stock-service&quot;,configuration = RandomRuleConfig.class)&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(OrderApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@LoadBalanced</span></span><br><span class="line">    <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">(RestTemplateBuilder builder)</span>&#123;</span><br><span class="line">        <span class="type">RestTemplate</span> <span class="variable">restTemplate</span> <span class="operator">=</span> builder.build();</span><br><span class="line">        <span class="keyword">return</span> restTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>测试，发现在两个库存服务中随机调用</p>
+<h4 id="5-5-2-配置文件修改"><a href="#5-5-2-配置文件修改" class="headerlink" title="5.5.2 配置文件修改"></a>5.5.2 配置文件修改</h4><p>注释掉上面的注解，修改yml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8030</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">order-service</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">username:</span> <span class="string">nacos</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">nacos</span></span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">stock-service:</span></span><br><span class="line">  <span class="attr">ribbon:</span></span><br><span class="line">    <span class="attr">NFLoadBalancerRuleClassName:</span> <span class="string">com.alibaba.cloud.nacos.ribbon.NacosRule</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里使用的是权重配置，在nacos管理页面配置一下节点的权重</p>
+<p><img src="/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220723010439785.png" alt="image-20220723010439785"></p>
+<p>在权重为1、5的情况下测试调用数为2、10，虽然接近于权重比，但是并不是一定按照权重比来分配服务消费的，权重越高，分配服务概率越大</p>
+<h4 id="5-5-3-自定义负载均衡策略"><a href="#5-5-3-自定义负载均衡策略" class="headerlink" title="5.5.3 自定义负载均衡策略"></a>5.5.3 自定义负载均衡策略</h4><p>继承AbstractLoadBalancerRule，实现choose方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Ryan Tian</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/7/24 13:25</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomRule</span> <span class="keyword">extends</span> <span class="title class_">AbstractLoadBalancerRule</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initWithNiwsConfig</span><span class="params">(IClientConfig iClientConfig)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Server <span class="title function_">choose</span><span class="params">(Object key)</span> &#123;</span><br><span class="line">        <span class="comment">// 获得当前请求的服务实例</span></span><br><span class="line">        <span class="type">ILoadBalancer</span> <span class="variable">loadBalancer</span> <span class="operator">=</span> <span class="built_in">this</span>.getLoadBalancer();</span><br><span class="line">        List&lt;Server&gt; reachableServers = loadBalancer.getReachableServers();</span><br><span class="line">        <span class="type">int</span> <span class="variable">random</span> <span class="operator">=</span> ThreadLocalRandom.current().nextInt(reachableServers.size());</span><br><span class="line">        <span class="type">Server</span> <span class="variable">server</span> <span class="operator">=</span> reachableServers.get(random);</span><br><span class="line">        <span class="keyword">if</span>(server.isAlive())&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> server;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后修改5.5.2中的配置文件的rule路径为上面的CustomRule类即可</p>
+<p><strong>饥饿加载</strong></p>
+<p>在进行服务调用的时候，如果网络情况不好，第一次调用会超时。</p>
+<p>开启饥饿加载，解决第一次调用慢的问题。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="attr">ribbon:</span></span><br><span class="line"><span class="number">2</span>   <span class="string">eager‐load:</span></span><br><span class="line"><span class="number">3</span>     <span class="comment"># 开启ribbon饥饿加载</span></span><br><span class="line"><span class="attr">4     enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="number">5</span>     <span class="comment"># 配置mall‐user使用ribbon饥饿加载，多个使用逗号分隔</span></span><br><span class="line"><span class="attr">6     clients:</span> <span class="string">stock-service</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-6-Spring-Cloud-LoadBalancer"><a href="#5-6-Spring-Cloud-LoadBalancer" class="headerlink" title="5.6 Spring Cloud LoadBalancer"></a>5.6 Spring Cloud LoadBalancer</h3><h4 id="5-6-1什么是什么是Spring-Cloud-LoadBalancer"><a href="#5-6-1什么是什么是Spring-Cloud-LoadBalancer" class="headerlink" title="5.6.1什么是什么是Spring Cloud LoadBalancer"></a>5.6.1什么是什么是Spring Cloud LoadBalancer</h4><p>Spring Cloud LoadBalancer是Spring Cloud官方自己提供的客户端负载均衡器, 用来替代 Ribbon。</p>
+<p>Spring官方提供了两种负载均衡的客户端：</p>
+<p><strong>RestTemplate</strong></p>
+<p>RestTemplate是Spring提供的用于访问Rest服务的客户端，RestTemplate提供了多种便捷访问 远程Http服务的方法，能够大大提高客户端的编写效率。默认情况下，RestTemplate默认依赖 jdk的HTTP连接工具。</p>
+<p><strong>WebClient</strong></p>
+<p>WebClient是从Spring WebFlux 5.0版本开始提供的一个非阻塞的基于响应式编程的进行Http请 求的客户端工具。它的响应式编程的基于Reactor的。WebClient中提供了标准Http请求方式对 应的get、post、put、delete等方法，可以用来发起相应的请求。</p>
+<h4 id="5-6-2RestTemplate整合LoadBalancer"><a href="#5-6-2RestTemplate整合LoadBalancer" class="headerlink" title="5.6.2RestTemplate整合LoadBalancer"></a>5.6.2RestTemplate整合LoadBalancer</h4><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!‐‐ LoadBalancer ‐‐&gt;</span><br><span class="line">2 <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">3 <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">4 <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring‐cloud‐starter‐loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">5 <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">6</span><br><span class="line">7 &lt;!‐‐ 提供了RestTemplate支持 ‐‐&gt;</span><br><span class="line">8 <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">9 <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">10 <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring‐boot‐starter‐web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">11 <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">12</span><br><span class="line">13 &lt;!‐‐ nacos服务注册与发现 移除ribbon支持‐‐&gt;</span><br><span class="line">14 <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">15 <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">16 <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring‐cloud‐starter‐alibaba‐nacos‐discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">17 <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">18 <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">19 <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">20 <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring‐cloud‐starter‐netflix‐ribbon<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">21 <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">22 <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">23 <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>nacos-discovery中引入了ribbon，需要移除ribbon的包 如果不移除，也可以在yml中配置不使用ribbon</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"># 不使用ribbon</span></span><br><span class="line"><span class="attr">9  loadbalancer:</span></span><br><span class="line"><span class="attr">10  ribbon:</span></span><br><span class="line"><span class="attr">11  enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用@LoadBalanced注解配置RestTemplate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RestConfig</span> &#123;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="meta">@LoadBalanced</span></span><br><span class="line"> <span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span> &#123;</span><br><span class="line"> <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-微服务调用组件Feign"><a href="#6-微服务调用组件Feign" class="headerlink" title="6.微服务调用组件Feign"></a>6.微服务调用组件Feign</h2><h3 id="6-1-JAVA-项目中如何实现接口调用？"><a href="#6-1-JAVA-项目中如何实现接口调用？" class="headerlink" title="6.1 JAVA 项目中如何实现接口调用？"></a>6.1 JAVA 项目中如何实现接口调用？</h3><p>1）<strong>Httpclient</strong></p>
+<p>HttpClient 是 Apache Jakarta Common 下的子项目，用来提供高效的、最新的、功能丰富 的支持 Http 协议的客户端编程工具包，并且它支持 HTTP 协议最新版本和建议。HttpClient 相比传统 JDK 自带的 URLConnection，提升了易用性和灵活性，使客户端发送 HTTP 请求变 得容易，提高了开发的效率。</p>
+<p>2）<strong>Okhttp</strong></p>
+<p>一个处理网络请求的开源项目，是安卓端最火的轻量级框架，由 Square 公司贡献，用于替代 HttpUrlConnection 和 Apache HttpClient。OkHttp 拥有简洁的 API、高效的性能，并支持 多种协议（HTTP&#x2F;2 和 SPDY）。</p>
+<p>3）<strong>HttpURLConnection</strong></p>
+<p>HttpURLConnection 是 Java 的标准类，它继承自 URLConnection，可用于向指定网站发送 GET 请求、POST 请求。HttpURLConnection 使用比较复杂，不像 HttpClient 那样容易使 用。</p>
+<p>4）<strong>RestTemplate</strong></p>
+<p>WebClient RestTemplate 是 Spring 提供的用于访问 Rest 服务的客户端，RestTemplate 提供了多种便 捷访问远程 HTTP 服务的方法，能够大大提高客户端的编写效率。 上面介绍的是最常见的几种调用接口的方法，我们下面要介绍的方法比上面的更简单、方便， 它就是 Feign。</p>
+<h3 id="6-2什么是Feign"><a href="#6-2什么是Feign" class="headerlink" title="6.2什么是Feign"></a>6.2什么是Feign</h3><p>Feign是Netflix开发的声明式、模板化的HTTP客户端。Feign可帮助我们更加便捷、优雅地调用HTTP API。 Feign支持多种注解，例如Feign自带的注解或者JAX-RS注解等。</p>
+<p>Spring Cloud openfeign对Feign进行了增强，使其支持Spring MVC注解，另外还整合了 Ribbon和Nacos，从而使得Feign的使用更加方便。</p>
+<p><strong>优势</strong></p>
+<p>Feign可以做到使用 HTTP 请求远程服务时就像调用本地方法一样的体验，开发者完全感知不 到这是远程方法，更感知不到这是个 HTTP 请求。它像 Dubbo 一样，consumer 直接调用接 口方法调用 provider，而不需要通过常规的 Http Client 构造请求再解析返回数据。它解决了 让开发者调用远程接口就跟调用本地方法一样，无需关注与远程的交互细节，更无需关注分布 式环境开发。</p>
+<h3 id="6-3-快速整合Feign"><a href="#6-3-快速整合Feign" class="headerlink" title="6.3.快速整合Feign"></a>6.3.快速整合Feign</h3><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>未完待续…</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://ryantian96.github.io">Ryan Tian</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ryantian96.github.io/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/">https://ryantian96.github.io/2022/07/05/Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ryantian96.github.io" target="_blank">旅人小站</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring/">Spring</a></div><div class="post_share"><div class="social-share" data-image="https://s1.ax1x.com/2022/08/06/vuJzOf.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/13/ThreadLocal%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0/"><img class="prev-cover" src="https://s1.ax1x.com/2022/06/11/Xcbc9I.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ThreadLocal原理学习</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/05/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86%E4%B8%80/"><img class="next-cover" src="https://s1.ax1x.com/2022/06/10/X6Wv4O.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">基础知识整理一</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/06/10/spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" title="spring循环依赖"><img class="cover" src="https://s1.ax1x.com/2022/06/10/X6Wv4O.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-10</div><div class="title">spring循环依赖</div></div></a></div><div><a href="/2022/07/25/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86%E4%BA%8C/" title="基础知识整理二"><img class="cover" src="https://s1.ax1x.com/2022/06/10/X6Wv4O.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-25</div><div class="title">基础知识整理二</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s1.ax1x.com/2022/05/08/O8Agt1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ryan Tian</div><div class="author-info__description">羁旅长堪醉，相留畏晓钟</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/RyanTian96"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my blog~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring-Cloud%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80"><span class="toc-number">1.</span> <span class="toc-text">Spring Cloud学习笔记一</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">1.环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-spring-cloud-alibaba%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.2.</span> <span class="toc-text">2.spring cloud alibaba环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9E%B6%E6%9E%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">3.架构演变过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-number">1.4.</span> <span class="toc-text">4.Nacos注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 演变过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Nacos-discovery"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 Nacos discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 核心功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%92%8C%E5%85%B6%E4%BB%96%E4%B8%BB%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 和其他主注册中心的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-Nacos%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 Nacos使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-1-%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8nacos%E6%9C%8D%E5%8A%A1%EF%BC%88windows%EF%BC%89"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">4.5.1 本地启动nacos服务（windows）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-2-spring-boot-%E9%85%8D%E7%BD%AEnacos-discovery%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">4.5.2 spring boot 配置nacos discovery服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-5-3-%E4%BF%AE%E6%94%B9%E5%8E%9F%E6%9C%89%E6%8E%A5%E5%8F%A3%E5%B9%B6%E6%B5%8B%E8%AF%95%E8%B0%83%E7%94%A8"><span class="toc-number">1.4.5.3.</span> <span class="toc-text">4.5.3 修改原有接口并测试调用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-nacos%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">1.4.6.</span> <span class="toc-text">4.6 nacos的负载均衡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">1.5.</span> <span class="toc-text">5.Ribbon负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E4%BB%80%E4%B9%88%E6%98%AFRibbon%EF%BC%9F"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1什么是Ribbon？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%B8%B8%E8%A7%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 常见负载均衡算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">5.3负载均衡的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">1.5.4.</span> <span class="toc-text">5.4Ribbon负载均衡策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">1.5.5.</span> <span class="toc-text">5.5修改默认负载均衡策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-1-%E6%89%8B%E5%8A%A8%E7%BC%96%E5%86%99%E7%B1%BB%E7%9A%84%E6%96%B9%E5%BC%8F%E4%BF%AE%E6%94%B9"><span class="toc-number">1.5.5.1.</span> <span class="toc-text">5.5.1 手动编写类的方式修改</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="toc-number">1.5.5.2.</span> <span class="toc-text">5.5.2 配置文件修改</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">1.5.5.3.</span> <span class="toc-text">5.5.3 自定义负载均衡策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-Spring-Cloud-LoadBalancer"><span class="toc-number">1.5.6.</span> <span class="toc-text">5.6 Spring Cloud LoadBalancer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-6-1%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%80%E4%B9%88%E6%98%AFSpring-Cloud-LoadBalancer"><span class="toc-number">1.5.6.1.</span> <span class="toc-text">5.6.1什么是什么是Spring Cloud LoadBalancer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-6-2RestTemplate%E6%95%B4%E5%90%88LoadBalancer"><span class="toc-number">1.5.6.2.</span> <span class="toc-text">5.6.2RestTemplate整合LoadBalancer</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign"><span class="toc-number">1.6.</span> <span class="toc-text">6.微服务调用组件Feign</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-JAVA-%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%EF%BC%9F"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1 JAVA 项目中如何实现接口调用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2%E4%BB%80%E4%B9%88%E6%98%AFFeign"><span class="toc-number">1.6.2.</span> <span class="toc-text">6.2什么是Feign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%BF%AB%E9%80%9F%E6%95%B4%E5%90%88Feign"><span class="toc-number">1.6.3.</span> <span class="toc-text">6.3.快速整合Feign</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/01/29/ruoyi%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="ruoyi学习笔记（二）"><img src="https://s1.ax1x.com/2023/01/11/pSn8BVJ.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ruoyi学习笔记（二）"/></a><div class="content"><a class="title" href="/2023/01/29/ruoyi%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="ruoyi学习笔记（二）">ruoyi学习笔记（二）</a><time datetime="2023-01-29T09:19:21.000Z" title="发表于 2023-01-29 17:19:21">2023-01-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/11/ruoyi%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="ruoyi学习笔记（一）"><img src="https://s1.ax1x.com/2023/01/11/pSn8BVJ.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ruoyi学习笔记（一）"/></a><div class="content"><a class="title" href="/2023/01/11/ruoyi%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="ruoyi学习笔记（一）">ruoyi学习笔记（一）</a><time datetime="2023-01-11T09:12:16.000Z" title="发表于 2023-01-11 17:12:16">2023-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/23/word%E5%AE%8F%E5%88%86%E4%BA%AB-%E9%80%89%E4%B8%AD%E6%89%80%E6%9C%89%E8%A1%A8%E6%A0%BC%E5%92%8C%E5%9B%BE%E7%89%87%E5%A4%A7%E5%B0%8F%E7%BB%9F%E4%B8%80%E5%A4%84%E7%90%86/" title="word宏分享-选中所有表格和图片大小统一处理"><img src="https://s1.ax1x.com/2022/08/06/vu3UiR.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="word宏分享-选中所有表格和图片大小统一处理"/></a><div class="content"><a class="title" href="/2022/09/23/word%E5%AE%8F%E5%88%86%E4%BA%AB-%E9%80%89%E4%B8%AD%E6%89%80%E6%9C%89%E8%A1%A8%E6%A0%BC%E5%92%8C%E5%9B%BE%E7%89%87%E5%A4%A7%E5%B0%8F%E7%BB%9F%E4%B8%80%E5%A4%84%E7%90%86/" title="word宏分享-选中所有表格和图片大小统一处理">word宏分享-选中所有表格和图片大小统一处理</a><time datetime="2022-09-23T10:41:55.000Z" title="发表于 2022-09-23 18:41:55">2022-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/02/Hibernate%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/" title="Hibernate配置文件学习"><img src="https://s1.ax1x.com/2022/06/11/Xcbg3t.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hibernate配置文件学习"/></a><div class="content"><a class="title" href="/2022/09/02/Hibernate%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/" title="Hibernate配置文件学习">Hibernate配置文件学习</a><time datetime="2022-09-02T05:48:18.000Z" title="发表于 2022-09-02 13:48:18">2022-09-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/01/Hibernate%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="Hibernate学习笔记（一）"><img src="https://s1.ax1x.com/2022/06/11/Xcbg3t.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hibernate学习笔记（一）"/></a><div class="content"><a class="title" href="/2022/09/01/Hibernate%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="Hibernate学习笔记（一）">Hibernate学习笔记（一）</a><time datetime="2022-09-01T08:16:07.000Z" title="发表于 2022-09-01 16:16:07">2022-09-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Ryan Tian</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="8471733119" data-server="tencent" data-type="playlist" data-fixed="true" volume=0.5 data-autoplay="false" data-mini="true"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
